@@ -46,7 +46,7 @@ exports.getAll = async(req, res) => {
         });
     }
 
-    if (req.body.sort) {
+    if (req.body.sort && req.body.sort.length > 0) {
         switch (req.body.sort) {
             case "countUp":
                 {
@@ -97,6 +97,7 @@ exports.getAll = async(req, res) => {
                 boxcount: 1,
                 price: 1,
                 sector: 1,
+                createdAt: 1,
             },
         },
 

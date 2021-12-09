@@ -20,7 +20,12 @@ exports.start = async(req, res, next) => {
     const salt = await bcrypt.genSaltSync(12);
     const password = await bcrypt.hashSync("admin", salt);
 
-    const user = new User({ login: "admin", password: "admin", role: "admin" });
+    const user = new User({
+        login: "admin",
+        password: "admin",
+        role: "admin",
+        name: "Admin",
+    });
     user.password = password;
     user.save()
         .then(() => {
