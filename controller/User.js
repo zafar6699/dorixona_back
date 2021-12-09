@@ -1,7 +1,7 @@
 const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-exports.create = async (req, res, next) => {
+exports.create = async(req, res, next) => {
     const salt = await bcrypt.genSaltSync(12);
     const password = await bcrypt.hashSync(req.body.password, salt);
 
@@ -16,7 +16,22 @@ exports.create = async (req, res, next) => {
         });
 };
 
-exports.login = async (req, res, next) => {
+exports.start = async(req, res, next) => {
+    const salt = await bcrypt.genSaltSync(12);
+    const password = await bcrypt.hashSync("admin", salt);
+
+    const user = new User({ login: "admin", password: "admin", role: "admin" });
+    user.password = password;
+    user.save()
+        .then(() => {
+            return res.status(200).json({ success: true });
+        })
+        .catch((err) => {
+            return res.status(400).json({ success: false, err });
+        });
+};
+
+exports.login = async(req, res, next) => {
     await User.findOne({ login: req.body.login }).exec((err, data) => {
         if (err) return res.status(400).json({ success: false, err });
         if (!data)
@@ -37,7 +52,7 @@ exports.login = async (req, res, next) => {
     });
 };
 
-exports.getAll = async (req, res, next) => {
+exports.getAll = async(req, res, next) => {
     await User.find()
         .sort({ createdAt: -1 })
         .exec((err, data) => {
@@ -46,23 +61,19 @@ exports.getAll = async (req, res, next) => {
         });
 };
 
-exports.getOne = async (req, res, next) => {
+exports.getOne = async(req, res, next) => {
     const result = await User.findById(req.params.id);
     res.status(200).json({ success: true, data: result });
 };
 
-exports.updateOne = async (req, res, next) => {
-    await User.updateOne(
-        { _id: req.params.id },
-        { $set: req.body },
-        { new: true }
-    ).exec((err, data) => {
+exports.updateOne = async(req, res, next) => {
+    await User.updateOne({ _id: req.params.id }, { $set: req.body }, { new: true }).exec((err, data) => {
         if (err) return res.status(400).json({ success: false, err });
         return res.status(200).json({ success: true, data });
     });
 };
 
-exports.me = async (req, res) => {
+exports.me = async(req, res) => {
     const token = req.headers.authorization;
 
     console.log("token--->", token);
@@ -76,7 +87,7 @@ exports.me = async (req, res) => {
     });
 };
 
-exports.deleteOne = async (req, res, next) => {
+exports.deleteOne = async(req, res, next) => {
     await User.deleteOne({ _id: req.params.id }).exec((err, data) => {
         if (err) return res.status(400).json({ success: false, err });
         return res.status(200).json({ success: true, data });
