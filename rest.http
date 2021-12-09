@@ -1,0 +1,36 @@
+
+## For Requests ##
+
+POST http://localhost:8080/auth/create
+Content-Type: application/json
+{
+    "name": "Jamshid",
+    "login": "jamshidxon@gmail.com",
+    "password": "123",
+    "phone": "+998945545522"
+}
+
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+
+###
+GET http://localhost:8080/api/auth/all
+Content-Type: application/json
+
+
+###
+GET http://localhost:8080/api/auth/
+Content-Type: application/json
+
+
+###
+PUT http://localhost:8080/api/auth/
+Content-Type: application/json
+
+
+###
+DELETE  http://localhost:8080/api/auth/
+Content-Type: application/json
